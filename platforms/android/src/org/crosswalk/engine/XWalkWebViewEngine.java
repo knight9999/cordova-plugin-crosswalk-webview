@@ -127,7 +127,7 @@ public class XWalkWebViewEngine implements CordovaWebViewEngine {
                 }
 
                 if (startUrl != null) {
-                    webView.load(startUrl, null);
+                    load(startUrl);
                 }
             }
         };
@@ -197,12 +197,12 @@ public class XWalkWebViewEngine implements CordovaWebViewEngine {
         if (!xwalkUserAgent.isEmpty()) {
             webView.setUserAgentString(xwalkUserAgent);
         }
-        
+
         String appendUserAgent = preferences.getString("AppendUserAgent", "");
         if (!appendUserAgent.isEmpty()) {
             webView.setUserAgentString(webView.getUserAgentString() + " " + appendUserAgent);
         }
-        
+
         if (preferences.contains("BackgroundColor")) {
             int backgroundColor = preferences.getInteger("BackgroundColor", Color.BLACK);
             webView.setBackgroundColor(backgroundColor);
@@ -299,8 +299,19 @@ public class XWalkWebViewEngine implements CordovaWebViewEngine {
             startUrl = url;
             return;
         }
-        webView.load(url, null);
+        load(url);
     }
+
+    public void load(String url) {
+      if (url.equals("about:blank") || url.startsWith("javascript:")) {
+        webView.load(url, null);
+      } else {
+        String content = "{ \"name:\" : \"XwalkApp\" , \"start_url\" : \"" +  url.replaceAll("\"","\\\"") + "\", " +
+                         " \"xwalk_hosts\" : [ \"file://*/\",  \"content://*/\", \"http://*/\", \"https://*/\" ] }";
+        webView.loadAppFromManifest(url, content);
+      }
+    }
+
 
     public boolean isXWalkReady() {
         return activityDelegate.isXWalkReady();
