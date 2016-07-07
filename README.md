@@ -1,3 +1,16 @@
+# はじめに
+
+Monaca Androidデバッガーに組み込んだ時に、外部サーバーへのajax通信を行っても、
+
+    No 'Access-Control-Allow-Origin' header is present on the requested resource. Origin 'file://' is therefore not allowed access.
+
+エラーが発生しないように改良したCrosswalkeWebViewEngine.
+
+# テクニカルノート
+
+
+
+
 # cordova-plugin-crosswalk-webview
 
 Makes your Cordova application use the [Crosswalk WebView](https://crosswalk-project.org/)
